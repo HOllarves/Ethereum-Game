@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Guess stuff, make dough</title>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
+    crossorigin="anonymous">
+  <script src="./app.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <h1>Guess Stuff</h1>
+        <h2>Make Dough</h2>
+        <h3>You have
+          <span class="black">
+            <span id="balance"></span> ETH </span>
+        </h3>
+      </div>
+      <div class="col-lg-12">
+        <h1>Create Game</h1>
+        <h3>Select a number between 1 and 10. Put a bounty on your guess and challenge your friends for their cash.</h3>
+        <h3>Guess Stuff Make Dough is for those who despertaly need to waste their money... or make tons of it :D</h3>
+        <div class="form-group">
+          <label for="name">Name:</label>
+          <input type="text" class="form-control" id="name" placeholder="e.g., Awesome Game">
+        </div>
+        <div class="form-group">
+          <label for="guess">Guess (1-10):</label>
+          <input type="number" class="form-control" id="guess" placeholder="e.g., 3">
+        </div>
+        <div class="form-group">
+          <label for="reward">Reward (in ETH):</label>
+          <input type="number" class="form-control" id="reward">
+        </div>
+        <button class="btn btn-primary" id="send" onclick="App.createGame()">Create Game</button>
+        <div class="col-lg-12">
+          <span id="status"></span>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <hr>
+        <h1>Available Games:</h1>
+        <table id="games">
+          <tr id="games_header">
+            <th>Name</th>
+            <th>Reward</th>
+            <th>Guess</th>
+          </tr>
+        </table>
+      </div>
+      <div class="col-lg-12">
+        <button class="btn btn-secondary" onclick="App.guessGames()">Guess!</button>
+        <button class="btn btn-primary" onclick="App.cashOut()">Cash Out</button>
+        <button class="btn btn-success" onclick="App.getGames()">Load Games</button>
+        <button class="btn btn-success" onclick="App.refreshBalance()">Load Balance</button>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <hr>
+      <h1>My Games:</h1>
+      <div class="col-lg-10" id="my_game"></div>
+    </div>
+  </div>
+</body>
+<footer>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
+    crossorigin="anonymous"></script>
+</footer>
+
+</html>
