@@ -3,10 +3,10 @@ import "../stylesheets/app.css";
 
 // Import libraries we need.
 import { default as Web3 } from 'web3';
-import { default as contract } from 'truffle-contract'
+import { default as contract } from 'truffle-contract';
 
 // Import our contract artifacts and turn them into usable abstractions.
-import game_artifacts from '../../build/contracts/Game.json'
+import game_artifacts from '../../build/contracts/Game.json';
 
 // Game is our usable abstraction, which we'll use through the code below.
 var Game = contract(game_artifacts);
@@ -23,7 +23,7 @@ window.App = {
     // Bootstrap the Game abstraction for Use.
     Game.setProvider(web3.currentProvider);
     // Get the initial account balance so it can be displayed.
-    web3.eth.getAccounts(function (err, accs) {
+    web3.eth.getAccounts((err, accs) => {
       if (err != null) {
         alert("There was an error fetching your accounts.");
         return;
@@ -45,12 +45,12 @@ window.App = {
   },
   refreshBalance: function () {
     var self = this;
-    Game.deployed().then(function (instance) {
+    Game.deployed().then((instance) => {
       return instance.getBalance.call(account, { from: account });
-    }).then(function (value) {
+    }).then((value) => {
       var balance_element = document.getElementById("balance");
       balance_element.innerHTML = value.valueOf() / 1000000000000000000;
-    }).catch(function (e) {
+    }).catch((e) => {
       console.log(e);
       self.setStatus("Error getting balance; see log.");
     });
@@ -59,23 +59,23 @@ window.App = {
   getGames: function () {
     var self = this;
     self.available_games = []
-    Game.deployed().then(function (instance) {
+    Game.deployed().then((instance) => {
       return instance.getGamesAddr()
-    }).then(function (games) {
+    }).then((games) => {
       if (games.length > 0) {
-        Game.deployed().then(function (instance) {
+        Game.deployed().then((instance) => {
           games.forEach((game, idx, arr) => {
             instance.getGame(game)
-              .then(function (_game) {
+              .then((_game) => {
                 if (_game[2] == false) {
-                  self.available_games.push({ id: game, name: _game[0], reward: _game[1].valueOf(), status: _game[2] })
+                  self.available_games.push({ id: game, name: _game[0], reward: _game[1].valueOf(), status: _game[2] });
                 }
                 if (game == account) {
-                  self.my_game = { id: game, name: _game[0], reward: _game[1].valueOf(), finished: _game[2] }
-                  self.setMyGame()
+                  self.my_game = { id: game, name: _game[0], reward: _game[1].valueOf(), finished: _game[2] };
+                  self.setMyGame();
                 }
                 if (idx == arr.length - 1) {
-                  self.setTable(self.available_games)
+                  self.setTable(self.available_games);
                 }
               })
           })
@@ -88,28 +88,28 @@ window.App = {
     var self = this;
     if (self.my_game) {
       if (self.my_game_list) {
-        self.my_game_list.parentNode.removeChild(self.my_game_list)
+        self.my_game_list.parentNode.removeChild(self.my_game_list);
       }
-      self.my_game_list = document.createElement('ul')
+      self.my_game_list = document.createElement('ul');
       Object.entries(self.my_game).forEach(([key, val]) => {
-        self.my_game_list.appendChild(document.createElement('br'))
-        let game_prop = document.createElement('h3')
-        let game_val = document.createElement('li')
-        game_prop.innerHTML = key
-        self.my_game_list.appendChild(game_prop)
-        game_val.appendChild(document.createTextNode(val))
-        self.my_game_list.appendChild(game_val)
+        self.my_game_list.appendChild(document.createElement('br'));
+        let game_prop = document.createElement('h3');
+        let game_val = document.createElement('li');
+        game_prop.innerHTML = key;
+        self.my_game_list.appendChild(game_prop);
+        game_val.appendChild(document.createTextNode(val));
+        self.my_game_list.appendChild(game_val);
       })
-      let list_container = document.getElementById("my_game")
-      list_container.appendChild(self.my_game_list)
+      let list_container = document.getElementById("my_game");
+      list_container.appendChild(self.my_game_list);
     }
   },
 
   getGameCount: function () {
     var self = this;
-    Game.deployed().then(function (instance) {
-      return instance.countGames()
-    }).then(function (count) {
+    Game.deployed().then((instance) => {
+      return instance.countGames();
+    }).then((count) => {
       console.log("Count: ", count)
     })
   },
@@ -118,43 +118,38 @@ window.App = {
     var self = this;
     if (games.length > 0) {
       self.table = document.getElementById("games");
-      console.log(self.table)
       if (self.table) {
-        let tbody = self.table.childNodes[1]
+        let tbody = self.table.childNodes[1];
         while (tbody.childNodes.length > 2) { tbody.removeChild(tbody.lastChild); }
       }
-      console.log(games)
       for (let i = 0; i < games.length; i++) {
         if (games[i].id != account) {
-          console.log(games[i])
           let row = self.table.insertRow();
           let game_name = row.insertCell();
           let game_reward = row.insertCell();
           let guess_input = row.insertCell();
           let btn = document.createElement('input');
           btn.type = "button";
-          btn.className = "btn btn-sm"
-          btn.onclick = (event) => { self.makeGuess() }
+          btn.className = "btn btn-sm";
+          btn.onclick = (event) => { self.makeGuess() };
           game_name.innerHTML = games[i].name;
           game_reward.innerHTML = (games[i].reward / 1000000000000000000).toString() + " ETH";
-          guess_input.innerHTML = "<input type='number' id='" + games[i].id + "' onblur=App.addGuess('" + games[i].id + "'," + games[i].reward + ")>"
+          guess_input.innerHTML = "<input type='number' id='" + games[i].id + "' onblur=App.addGuess('" + games[i].id + "'," + games[i].reward + ")>";
         }
       }
     }
   },
 
   addGuess: function (guess_id, reward) {
-    console.log("Guess ID", guess_id)
     var self = this;
-    let guess_input = document.getElementById(guess_id)
-    let new_guess = guess_input.value
-    console.log("New Guess", new_guess)
+    let guess_input = document.getElementById(guess_id);
+    let new_guess = guess_input.value;
     if (self.guessed_games && self.guessed_games.length > 0) {
       let found = false;
       self.guessed_games.forEach((_guess, idx, arr) => {
         if (_guess.id == guess_id) {
           _guess.value = parseInt(new_guess);
-          _guess.reward = parseFloat(reward)
+          _guess.reward = parseFloat(reward);
           found = true;
         }
         if (idx == arr.length - 1 && !found) {
@@ -171,7 +166,6 @@ window.App = {
     if (self.guessed_games && self.guessed_games.length > 0) {
       Game.deployed().then((instance) => {
         self.guessed_games.forEach(guessed => {
-          console.log(guessed)
           instance.guessGame.sendTransaction(guessed.id, guessed.value, { from: account, value: guessed.reward })
             .then(response => {
               self.setStatus("Guesses were made! Check your balance!")
@@ -186,7 +180,6 @@ window.App = {
     Game.deployed().then((instance) => {
       return instance.cashOut({ from: account })
     }).then(done => {
-      console.log("Done")
       self.setStatus("Cashed out!")
     }).catch(err => {
       console.log("Error: ", err)
@@ -201,17 +194,17 @@ window.App = {
     var reward = parseInt(document.getElementById("reward").value) * 1000000000000000000;
     this.setStatus("Starting Game... (please wait)");
     if (name && guess && reward) {
-      Game.deployed().then(function (instance) {
+      Game.deployed().then((instance) => {
         return instance.createGame.sendTransaction(name, guess, { from: account, value: reward });
-      }).then(function () {
+      }).then(() => {
         self.setStatus("Transaction complete!");
         self.refreshBalance();
-      }).catch(function (e) {
+      }).catch((e) => {
         console.log(e);
         self.setStatus("Error creating game; see log.");
       });
     } else {
-      self.setStatus("Form values are missing")
+      self.setStatus("Form values are missing");
     }
   }
 };
