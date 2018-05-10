@@ -20,20 +20,11 @@ This is a simple game in which any user can post one challenge and try to guess 
 
 To create a challenge, a player decides a number and establishes a reward in ether. The ether is sent to the smart contract and the challenge information is stored in the blockchain.
 
-To participate in a challenger, a player makes a guess and transfers the same amount of ether to the smart contract. This information is compared in the smart contract and the winner recieves a transfer to their internal balance.
+To participate in a challenge, a player makes a guess and transfers the same amount of ether to the smart contract. This information is compared in the smart contract and the winner recieves a transfer to their internal balance.
 
 All players have a internal balance in which they can see the amount of ether they have inside the smart contract.
 
-At any time a player can cash out their ether out of the smart contract.
-
-## Known bugs and problems encountered
-
-Besides not using a frontend framework (which now I regret and it's my bad) I did encountered a lot of problems with truffle and the test rpc interactions. I had to restart ganache a lot, and debug network ids to make it all work. Although I must say that once I installed Ganache GUI, everything went A LOT smoother.
-
-I also found that transactions are often rejected by lack of gas. I would love to know more on how to properly calculate gas usage and act accordingly.
-
-I also still don't really understand how to use events to trigger stuff in my frontend. I would love to have a much more automatic way to load new games and balances without having to click on a button.
-
+At any time a player can cash out their balance to their peronsal address.
 
 
 
